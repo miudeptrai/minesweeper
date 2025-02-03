@@ -1,1 +1,1 @@
-# minesweeper
+Funix project
