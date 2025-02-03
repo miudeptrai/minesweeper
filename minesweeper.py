@@ -3,7 +3,8 @@ import random
 board = [['.' for _ in range(5)] for _ in range(5)] #Display
 matrix = [[0 for _ in range(5)] for _ in range(5)]
 neighbours_tiles = [(-1,-1), (-1,0), (-1,1), (0,-1), (0,1), (1,-1), (1,0), (1,1)] #(i,j) <=> (y,x)
-num_0_tiles = []
+graph = {}
+visited = [[False for _ in range(len(matrix))] for _ in range(len(matrix))]
 
 def numTile(i: int, j: int, mines_pos: tuple[int]) -> None:
     global matrix
@@ -30,7 +31,6 @@ def prepareMatrix() -> None:
             if randomiser == 0:
                 matrix[i][j] = -1 #-1 is the indicator for a mine-tile
                 mines_pos.append((i,j))
-            else: num_0_tiles.append((i,j))
 
     #Changing the tile's number based on the neighbour tiles. If a neighbour tile is a mine-tile, raise the tile's number by 1
     for i in range(matrix_len):
@@ -66,14 +66,15 @@ def revealTile(i: int, j: int) -> None:
     global board
 
     board[i][j] = str(matrix[i][j])
-    if matrix[i][j] == 0:
-        for add_i, add_j in neighbours_tiles:
-            new_i = i + add_i
-            new_j = j + add_j
 
-            if 0 <= new_i < len(matrix) and 0 <= new_i < len(matrix):
-                board[new_i][new_j] = str(matrix[new_i][new_j])
-                if matrix[new_i][new_j] == 0: revealTile(new_i, new_j)
+    if matrix[i][j] == 0:
+        if visited[i][j]: return
+
+        visited = True
+
+        neighbours = graph[(i,j)]
+        for new_i, new_j in neighbours:
+            revealTile(new_i, new_j)
 
 def isLose() -> bool:
     for i in range(len(board)):
@@ -89,7 +90,24 @@ def printMatrix() -> None: #Debug tool
         
         print()
 
+def addToGraph() -> None:
+    global graph
+
+    neighbours = []
+    for i in range(len(matrix)):
+        for j in range(len(matrix)):
+            for add_i, add_j in neighbours_tiles:
+                new_i = i + add_i
+                new_j = j + add_j
+                if 0 <= new_i < len(matrix) and 0 <= new_j < len(matrix): neighbours.append((new_i,new_j))
+            
+            graph[(i,j)] = neighbours
+            neighbours = []
+
 def main() -> None:
+    prepareMatrix()
+    addToGraph()
+
     printBoard()
     while True:
         action, x, y = promptForInput("Please choose a starting position: ")
@@ -115,9 +133,12 @@ def main() -> None:
         if action == "flag": board[y][x] = 'f'
         else: revealTile(y, x)
 
+def debugMain() -> None:
+    addToGraph()
+    print(graph)
+
 print("Welcome to Minesweeper!")
 print("To dig a position type x and y in this form: x,y")
 print("To place a flag just add a 'f' at the end")
 
-prepareMatrix()
 main()
