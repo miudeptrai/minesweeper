@@ -88,7 +88,7 @@ def revealTile(i: int, j: int) -> None:
 
     board[i][j] = str(matrix[i][j])
 
-    #Too tired to explain this block
+    #DFS
     if matrix[i][j] == 0:
         neighbours = graph[(i,j)]
         for new_i, new_j in neighbours:
@@ -138,6 +138,7 @@ def main() -> None:
     print("Welcome to Minesweeper!")
     print("To dig a position type x and y in this form: x,y")
     print("To place a flag just add a 'f' at the end")
+    print("Mines are numbered 9")
 
     #Pre-game(Choosing a position)
     printBoard()
