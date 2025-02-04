@@ -53,7 +53,15 @@ def prepareMatrix(y: int, x: int) -> None:
                 numTile(i, j, mines_pos)
 
 def printBoard() -> None:
+    print("    ", end='') #4 blanks cuz 1 for the row indicator and 3 for decorator
+
+    for i in range(len(matrix)):
+        print(i, end=' ')
+
+    print('\n')
+
     for i in range(len(board)):
+        print(i, end="   ")
         for j in range(len(board)):
             print(board[i][j], end=' ')
         
@@ -176,9 +184,12 @@ def main() -> None:
         #Check whether or not the action is digging or placing a flag
         if action == "flag": board[y][x] = 'f'
         else: revealTile(y, x)
+    
+    input("Enter to exit...")
 
 def debugMain() -> None: #Debug tool
     addToGraph()
     print(graph)
 
-main()
+if __name__ == "__main__":
+    main()
