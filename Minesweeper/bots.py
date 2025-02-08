@@ -3,7 +3,7 @@ class Bot:
 
     def __init__(self, name, string, board_len, board):
         self.name = name
-        self.string = string
+        self.string = string #Not neccessary but just for fun
         self.board_len = board_len
         self.board = board
     

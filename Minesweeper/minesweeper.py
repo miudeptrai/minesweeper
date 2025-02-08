@@ -42,7 +42,7 @@ def prepareMatrix(y: int, x: int) -> None:
         for j in range(matrix_len):
             randomiser = random.randint(0,4) #This is the chance of getting a mine-tile. Currently 1/5
             #Make sure the starting position will always be a 0-tile
-            if randomiser == 0 and not (i,j) in starting_neighbours:
+            if randomiser == 0 and not (i,j) in starting_neighbours and (i,j) != (y,x):
                 matrix[i][j] = 9 #9 is the indicator for a mine-tile
                 mines_pos.append((i,j))
 
@@ -118,7 +118,15 @@ def isWin() -> bool:
     return True
 
 def printMatrix() -> None: #Debug tool
+    print("    ", end='')
+
     for i in range(len(matrix)):
+        print(i, end=' ')
+    
+    print('\n')
+
+    for i in range(len(matrix)):
+        print(i, end="   ")
         for j in range(len(matrix)):
             print(matrix[i][j], end=' ')
         
